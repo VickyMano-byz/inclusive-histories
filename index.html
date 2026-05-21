@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inclusive Histories — Accessing Pasts Beyond Ability, Background and Circumstance</title>
+<meta name="description" content="A research programme making the medieval Byzantine world accessible to schools and communities of all abilities, backgrounds and circumstances.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --linen: #f5f2ec;
+    --linen-deep: #ece8e0;
+    --warm-white: #faf8f4;
+    --ink: #2c3440;
+    --ink-soft: #6b6560;
+    --ink-faint: #9a948d;
+    --gold: #b8956a;
+    --gold-dark: #96754a;
+    --gold-light: #d4c4aa;
+    --terracotta: #c4704e;
+    --terracotta-light: #e8c0ae;
+    --deep-blue: #2c4a6e;
+    --deep-blue-light: #d0dce8;
+    --teal: #1a7a78;
+    --line: #d4cec4;
+    --line-gold: #c8b898;
+    --focus: #2864b4;
+    --max: 820px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+  }
+
+  body {
+    margin: 0; background-color: var(--linen);
+    color: var(--ink);
+    font-family: "Atkinson Hyperlegible", system-ui, sans-serif;
+    font-size: 1.125rem; line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .skip-link {
+    position: absolute; left: -999px; top: 0;
+    background: var(--ink); color: var(--linen);
+    padding: 0.85rem 1.4rem; z-index: 300;
+    font-family: "Lexend", system-ui, sans-serif; font-weight: 600; border-radius: 0 0 6px 0;
+  }
+  .skip-link:focus { left: 0; }
+  a:focus-visible, button:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; border-radius: 2px; }
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+  .wrap { width: min(var(--max), 88%); margin-inline: auto; }
+
+  /* ── Header / Nav ── */
+  header.site {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--ink);
+    border-bottom: 2px solid var(--gold);
+  }
+  .nav-inner { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0.9rem 0; }
+  .brand {
+    font-family: "Lexend", system-ui, sans-serif; font-weight: 600;
+    font-size: 1rem; letter-spacing: 0.04em;
+    color: var(--gold); text-decoration: none;
+    display: flex; align-items: center; gap: 0.6rem;
+  }
+  .brand .mark { width: 22px; height: 22px; flex: none; }
+  nav.primary ul { list-style: none; display: flex; gap: 1.6rem; margin: 0; padding: 0; }
+  nav.primary a {
+    color: rgba(255,255,255,0.55); text-decoration: none; font-size: 0.82rem; font-weight: 500;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 0.3rem 0; border-bottom: 1.5px solid transparent; transition: color 0.2s, border-color 0.2s;
+  }
+  nav.primary a:hover { color: var(--gold); border-bottom-color: var(--gold); }
+  @media (max-width: 880px) { nav.primary { display: none; } }
+
+  /* ── A11y toolbar ── */
+  .a11y-bar { position: fixed; top: 54px; right: 1rem; z-index: 150; display: flex; gap: 0.4rem; }
+  .a11y-btn {
+    display: flex; align-items: center; gap: 0.35rem;
+    padding: 0.4rem 0.75rem; border-radius: 3px;
+    font-family: "Lexend", system-ui, sans-serif; font-size: 0.75rem; font-weight: 600;
+    border: 1px solid var(--line); background: var(--warm-white); color: var(--ink-soft);
+    cursor: pointer; transition: all 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .a11y-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .a11y-btn.active { background: var(--ink); color: var(--gold); border-color: var(--ink); }
+  .a11y-btn svg { width: 15px; height: 15px; flex-shrink: 0; }
+  body.font-large { font-size: 1.3rem; }
+  body.font-large h1 { font-size: clamp(2.6rem, 6vw, 4.2rem) !important; }
+  body.font-large h2 { font-size: clamp(2rem, 4.5vw, 3rem) !important; }
+  @media (max-width: 880px) { .a11y-bar { top: auto; bottom: 1rem; right: 0.5rem; } .a11y-btn span.lbl { display: none; } }
+
+  /* ── Gold rules (exhibition dividers) ── */
+  .gold-rule {
+    width: 100%; max-width: var(--max); margin: 0 auto;
+    height: 0; border: 0;
+    border-top: 1px solid var(--line-gold);
+    position: relative;
+  }
+  .gold-rule::after {
+    content: ""; position: absolute; left: 50%; top: -4px; transform: translateX(-50%);
+    width: 8px; height: 8px; background: var(--gold); border-radius: 50%;
+  }
+
+  /* ── Hero ── */
+  .hero {
+    position: relative;
+    padding: clamp(4rem, 10vw, 8rem) 0 clamp(3.5rem, 8vw, 6rem);
+    text-align: center;
+  }
+  h1 {
+    font-family: "Lexend", system-ui, sans-serif; font-weight: 600;
+    font-size: clamp(2.2rem, 5.5vw, 3.8rem); line-height: 1.08;
+    letter-spacing: -0.01em; margin: 0 0 1.6rem; color: var(--ink);
+    max-width: 20ch; margin-inline: auto;
+  }
+  h1 .gild { color: var(--terracotta); font-style: italic; }
+  .hero .lede {
+    font-size: clamp(1.1rem, 2.2vw, 1.35rem); line-height: 1.6;
+    max-width: 50ch; color: var(--ink-soft); margin: 0 auto 2.4rem;
+  }
+  .cta-row { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; }
+  .btn {
+    display: inline-block; font-family: "Lexend", system-ui, sans-serif; font-weight: 600;
+    font-size: 0.92rem; text-decoration: none; padding: 0.8rem 1.6rem;
+    border-radius: 2px; cursor: pointer;
+    transition: transform 0.18s, background 0.2s, color 0.2s; border: 2px solid transparent;
+  }
+  .btn-primary { background: var(--ink); color: var(--gold); border-color: var(--ink); }
+  .btn-primary:hover { background: var(--gold-dark); color: #fff; border-color: var(--gold-dark); transform: translateY(-2px); }
+  .btn-ghost { background: transparent; color: var(--ink); border-color: var(--ink); }
+  .btn-ghost:hover { background: var(--ink); color: var(--gold); transform: translateY(-2px); }
+
+  .reveal { opacity: 0; transform: translateY(22px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.in { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; } }
+
+  /* ── Sections ── */
+  section { padding: clamp(3.5rem, 8vw, 5.5rem) 0; }
+  .section-tag {
+    font-family: "Lexend", system-ui, sans-serif; text-transform: uppercase;
+    letter-spacing: 0.22em; font-size: 0.72rem; font-weight: 600;
+    color: var(--gold); display: flex; align-items: center; gap: 0.8rem; margin: 0 0 1rem;
+  }
+  .section-tag::before { content: ""; width: 36px; height: 1px; background: var(--gold); display: inline-block; }
+  h2 {
+    font-family: "Lexend", system-ui, sans-serif; font-weight: 600;
+    font-size: clamp(1.8rem, 4vw, 2.6rem); line-height: 1.15;
+    letter-spacing: -0.005em; margin: 0 0 1.4rem; max-width: 24ch;
+  }
+  .prose p { max-width: 64ch; margin: 0 0 1.3rem; }
+  .prose p:last-child { margin-bottom: 0; }
+
+  .alt-bg { background: var(--linen-deep); }
+
+  .mission {
+    background: var(--ink); color: rgba(255,255,255,0.88);
+    position: relative;
+  }
+  .mission .section-tag { color: var(--gold); }
+  .mission .section-tag::before { background: var(--gold); }
+  .mission h2 { color: #fff; max-width: 24ch; }
+  .mission .prose p { font-size: 1.15rem; color: rgba(255,255,255,0.7); }
+
+  /* ── Pillars ── */
+  .pillar-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1.4rem; margin-top: 2.4rem; }
+  .pillar {
+    background: var(--warm-white); border: 1px solid var(--line);
+    border-left: 3px solid var(--gold);
+    padding: 1.8rem 1.6rem;
+    transition: transform 0.25s, box-shadow 0.25s;
+  }
+  .pillar:hover { transform: translateY(-4px); box-shadow: 0 14px 36px -20px rgba(0,0,0,0.1); }
+  .pillar .num { font-family: "Lexend", system-ui, sans-serif; font-size: 0.75rem; letter-spacing: 0.15em; color: var(--gold); font-weight: 600; }
+  .pillar h3 { font-family: "Lexend", system-ui, sans-serif; font-size: 1.3rem; margin: 0.5rem 0 0.7rem; line-height: 1.2; color: var(--ink); }
+  .pillar p { margin: 0; font-size: 1rem; color: var(--ink-soft); }
+  .pillar:nth-child(2) { border-left-color: var(--deep-blue); }
+  .pillar:nth-child(2) .num { color: var(--deep-blue); }
+  .pillar:nth-child(3) { border-left-color: var(--terracotta); }
+  .pillar:nth-child(3) .num { color: var(--terracotta); }
+
+  /* ── Projects ── */
+  .project {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 2.4rem; align-items: start;
+    padding: 2.2rem 0; border-bottom: 1px solid var(--line);
+  }
+  .project:last-of-type { border-bottom: none; }
+  .project.flip .project-media { order: 2; }
+  @media (max-width: 820px) {
+    .project { grid-template-columns: 1fr; gap: 1.4rem; }
+    .project.flip .project-media { order: 0; }
+  }
+  .project-body h3 {
+    font-family: "Lexend", system-ui, sans-serif; font-size: clamp(1.3rem, 2.8vw, 1.7rem);
+    line-height: 1.2; margin: 0.4rem 0 1rem;
+  }
+  .badge {
+    display: inline-block; font-family: "Lexend", system-ui, sans-serif; font-weight: 600;
+    font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 0.25rem 0.65rem; border-radius: 2px; background: var(--gold); color: #fff;
+  }
+  .badge.live { background: var(--deep-blue); }
+  @media (max-width: 820px) { .ongoing-grid { grid-template-columns: 1fr !important; } }
+  .project-body p { margin: 0 0 1rem; color: var(--ink-soft); font-size: 1.02rem; }
+  .project-body p:last-child { margin-bottom: 0; }
+  .partners { margin-top: 1rem; font-size: 0.9rem; color: var(--ink-faint); font-style: italic; }
+
+  .project-media {
+    background: var(--warm-white); border: 1px solid var(--line);
+    padding: 0.8rem; box-shadow: 0 10px 30px -20px rgba(0,0,0,0.08);
+  }
+  .project-media.illustrative { padding: 0; overflow: hidden; }
+  .project-media.illustrative img { display: block; }
+
+  /* ── Poster viewer ── */
+  .poster-viewer { width: 100%; }
+  .poster-tag { font-family: "Lexend", system-ui, sans-serif; font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); margin: 0 0 0.5rem; }
+  .poster-stage {
+    position: relative; background: var(--linen-deep); aspect-ratio: 1000 / 1415;
+    overflow: hidden; border: 1px solid var(--line);
+  }
+  .poster-stage img { width: 100%; height: 100%; object-fit: contain; display: none; }
+  .poster-stage img.active { display: block; }
+  .poster-controls { display: flex; align-items: center; justify-content: space-between; gap: 0.8rem; margin-top: 0.7rem; flex-wrap: wrap; }
+  .poster-controls .nav-btns { display: flex; gap: 0.4rem; }
+  .pbtn {
+    font-family: "Lexend", system-ui, sans-serif; font-weight: 600; font-size: 0.85rem;
+    background: var(--ink); color: var(--gold); border: none; cursor: pointer;
+    width: 38px; height: 38px; border-radius: 2px; transition: background 0.2s;
+  }
+  .pbtn:hover:not(:disabled) { background: var(--gold-dark); color: #fff; }
+  .pbtn:disabled { opacity: 0.3; cursor: not-allowed; }
+  .poster-counter { font-family: "Lexend", system-ui, sans-serif; font-size: 0.85rem; color: var(--ink-soft); }
+  .poster-actions { display: flex; gap: 0.5rem; }
+  .poster-actions button {
+    font-family: "Lexend", system-ui, sans-serif; font-weight: 600; font-size: 0.82rem;
+    padding: 0.45rem 0.85rem; border-radius: 2px; cursor: pointer;
+    border: 1.5px solid var(--ink); background: transparent; color: var(--ink);
+    transition: background 0.2s, color 0.2s;
+  }
+  .poster-actions button:hover { background: var(--ink); color: var(--gold); }
+
+  /* ── Gallery ── */
+  .gallery-head { margin-top: 2.8rem; }
+  .gallery-head h3 { font-family: "Lexend", system-ui, sans-serif; font-size: clamp(1.2rem, 2.8vw, 1.5rem); margin: 0 0 0.5rem; }
+  .gallery-head p { color: var(--ink-soft); max-width: 60ch; margin: 0 0 1.4rem; font-size: 1rem; }
+  .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.8rem; }
+  .gallery-item {
+    position: relative; margin: 0; overflow: hidden;
+    border: 1px solid var(--line); background: var(--linen-deep); cursor: zoom-in; aspect-ratio: 4 / 3;
+  }
+  .gallery-item:nth-child(1) { grid-column: span 2; grid-row: span 2; }
+  @media (max-width: 560px) { .gallery-item:nth-child(1) { grid-column: span 1; grid-row: span 1; } }
+  .gallery-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s ease; }
+  .gallery-item:hover img, .gallery-item:focus-within img { transform: scale(1.04); }
+  .gallery-item figcaption {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(to top, rgba(44,52,64,0.82), transparent);
+    color: #f0ece4; font-size: 0.8rem; line-height: 1.35;
+    padding: 1.4rem 0.8rem 0.6rem; opacity: 0; transition: opacity 0.3s;
+  }
+  .gallery-item:hover figcaption, .gallery-item:focus-within figcaption { opacity: 1; }
+  .gallery-item button.gtrigger {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    background: transparent; border: 0; cursor: zoom-in; padding: 0;
+  }
+  .gallery-item button.gtrigger:focus-visible { outline: 3px solid var(--focus); outline-offset: -3px; }
+
+  /* ── Video ── */
+  .video-section { margin-top: 2.2rem; }
+  .video-section h3 { font-family: "Lexend", system-ui, sans-serif; font-size: clamp(1.2rem, 2.8vw, 1.5rem); margin: 0 0 0.8rem; }
+  .video-wrap { max-width: 640px; overflow: hidden; border: 1px solid var(--line); background: var(--ink); }
+  .video-wrap video { width: 100%; display: block; }
+
+  /* ── Impact ── */
+  .impact-section { margin-top: 2.8rem; }
+  .impact-section h3 { font-family: "Lexend", system-ui, sans-serif; font-size: clamp(1.2rem, 2.8vw, 1.5rem); margin: 0 0 0.5rem; }
+  .impact-section > p { color: var(--ink-soft); max-width: 60ch; margin: 0 0 1.4rem; font-size: 1rem; }
+  .pie-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.2rem; }
+  .pie-card { background: var(--warm-white); border: 1px solid var(--line); padding: 1.4rem; }
+  .pie-card h4 { font-family: "Lexend", system-ui, sans-serif; font-size: 1rem; font-weight: 600; margin: 0 0 0.3rem; }
+  .pie-card .q { font-size: 0.85rem; color: var(--ink-soft); font-style: italic; margin: 0 0 1rem; }
+  .pie-container { display: flex; align-items: center; gap: 1.2rem; flex-wrap: wrap; }
+  .pie-svg { width: 130px; height: 130px; transform: rotate(-90deg); flex-shrink: 0; }
+  .pie-legend-item { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.3rem; font-size: 0.82rem; color: var(--ink-soft); }
+  .pie-legend-swatch { width: 11px; height: 11px; border-radius: 2px; flex-shrink: 0; }
+
+  /* ── Quotes ── */
+  .quotes-section { margin-top: 2.2rem; }
+  .quotes-section h3 { font-family: "Lexend", system-ui, sans-serif; font-size: clamp(1.2rem, 2.8vw, 1.5rem); margin: 0 0 0.8rem; }
+  .quotes-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0.8rem; }
+  .quote-card {
+    background: var(--warm-white); border: 1px solid var(--line);
+    border-left: 3px solid var(--terracotta);
+    padding: 1.2rem 1.3rem; position: relative;
+  }
+  .quote-card::before { content: '\201C'; font-size: 2.6rem; color: var(--terracotta); opacity: 0.2; position: absolute; top: -2px; left: 0.6rem; line-height: 1; }
+  .quote-card p { font-style: italic; color: var(--ink); line-height: 1.65; margin: 0; font-size: 0.95rem; }
+
+  /* ── Team photo ── */
+  .team-photo {
+    margin: 2.2rem 0 0; overflow: hidden;
+    border: 1px solid var(--line); box-shadow: 0 14px 36px -22px rgba(0,0,0,0.08);
+  }
+  .team-photo img { width: 100%; height: auto; display: block; }
+  .team-photo figcaption { background: var(--linen-deep); padding: 0.8rem 1rem; font-size: 0.88rem; color: var(--ink-soft); font-style: italic; }
+
+  /* ── Team grid ── */
+  .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.6rem; margin-top: 2.4rem; }
+  .member {
+    background: var(--warm-white); border: 1px solid var(--line); padding: 1.7rem 1.5rem;
+  }
+  .member .avatar {
+    width: 52px; height: 52px; border-radius: 50%;
+    background: var(--gold); color: #fff; display: flex; align-items: center; justify-content: center;
+    font-family: "Lexend", system-ui, sans-serif; font-weight: 700; font-size: 1.2rem; margin-bottom: 0.9rem;
+  }
+  .member:nth-child(2) .avatar { background: var(--deep-blue); }
+  .member h3 { font-family: "Lexend", system-ui, sans-serif; font-size: 1.2rem; margin: 0 0 0.2rem; }
+  .member .role { font-size: 0.85rem; color: var(--gold-dark); font-weight: 600; margin: 0 0 0.8rem; font-family: "Lexend", system-ui, sans-serif; }
+  .member:nth-child(2) .role { color: var(--deep-blue); }
+  .member p { font-size: 0.95rem; color: var(--ink-soft); margin: 0 0 0.8rem; }
+
+  /* ── Contact ── */
+  .contact-section {
+    background: var(--ink); color: rgba(255,255,255,0.88); text-align: center;
+  }
+  .contact-section .section-tag { color: var(--gold); justify-content: center; }
+  .contact-section .section-tag::before { background: var(--gold); }
+  .contact-section h2 { color: #fff; margin-inline: auto; }
+  .contact-section .prose p { color: rgba(255,255,255,0.6); margin-inline: auto; }
+  .contact-section .emails { margin-top: 1.4rem; display: flex; flex-direction: column; gap: 0.3rem; }
+  .contact-section .emails a { color: var(--gold); font-weight: 600; text-decoration: none; }
+  .contact-section .emails a:hover { text-decoration: underline; }
+  .contact-section .cta-row { justify-content: center; margin-top: 1.8rem; }
+  .contact-section .btn-primary { background: var(--gold); border-color: var(--gold); color: var(--ink); }
+  .contact-section .btn-primary:hover { background: var(--terracotta); border-color: var(--terracotta); color: #fff; transform: translateY(-2px); }
+
+  /* ── Footer ── */
+  footer.site { background: var(--ink); color: rgba(255,255,255,0.4); padding: 1.8rem 0; font-size: 0.88rem; border-top: 1px solid rgba(255,255,255,0.08); }
+  footer.site .wrap { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: space-between; align-items: center; }
+  footer.site a { color: var(--gold); text-decoration: none; }
+  footer.site a:hover { text-decoration: underline; }
+
+  /* ── Lightbox ── */
+  .lightbox {
+    position: fixed; inset: 0; z-index: 250;
+    background: rgba(44,52,64,0.94); display: none;
+    align-items: center; justify-content: center; padding: 2vh 2vw;
+  }
+  .lightbox.open { display: flex; }
+  .lightbox img { max-width: 100%; max-height: 92vh; object-fit: contain; }
+  .lightbox-close {
+    position: absolute; top: 1rem; right: 1rem; width: 46px; height: 46px;
+    border-radius: 50%; border: 1.5px solid rgba(255,255,255,0.4); background: transparent;
+    color: #fff; font-size: 1.4rem; cursor: pointer; line-height: 1;
+  }
+  .lightbox-close:hover { background: rgba(255,255,255,0.1); }
+  .lightbox-nav {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    background: rgba(255,255,255,0.08); border: 1.5px solid rgba(255,255,255,0.3); color: #fff;
+    width: 48px; height: 48px; border-radius: 50%; font-size: 1.3rem; cursor: pointer;
+  }
+  .lightbox-nav:hover { background: rgba(255,255,255,0.15); }
+  .lightbox-nav.prev { left: 1.5rem; }
+  .lightbox-nav.next { right: 1.5rem; }
+
+  /* ── Audio bar ── */
+  .audio-bar {
+    display: none; position: fixed; bottom: 0; left: 0; right: 0; z-index: 180;
+    background: var(--ink); color: #fff; padding: 0.6rem 2rem;
+    align-items: center; gap: 0.8rem; box-shadow: 0 -4px 16px rgba(0,0,0,0.15);
+    border-top: 1px solid var(--gold);
+  }
+  .audio-bar.visible { display: flex; }
+  .audio-bar-text { flex: 1; font-size: 0.78rem; color: rgba(255,255,255,0.6); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .audio-bar-btn {
+    background: none; border: 1.5px solid rgba(255,255,255,0.25); color: #fff;
+    width: 32px; height: 32px; border-radius: 50%; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .audio-bar-btn:hover { border-color: var(--gold); }
+  .audio-progress { flex: 2; height: 3px; background: rgba(255,255,255,0.12); border-radius: 2px; overflow: hidden; }
+  .audio-progress-fill { height: 100%; background: var(--gold); width: 0%; transition: width 0.3s; }
+
+  .reading-highlight { background: rgba(184,149,106,0.12); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<header class="site">
+  <div class="wrap nav-inner">
+    <a class="brand" href="#top" aria-label="Inclusive Histories — home">
+      <svg class="mark" viewBox="0 0 40 40" aria-hidden="true" focusable="false">
+        <path d="M20 1L39 20L20 39L1 20Z" fill="none" stroke="#b8956a" stroke-width="2"/>
+        <path d="M20 9L31 20L20 31L9 20Z" fill="#b8956a"/>
+      </svg>
+      Inclusive Histories
+    </a>
+    <nav class="primary" aria-label="Primary">
+      <ul>
+        <li><a href="#about">About</a></li>
+        <li><a href="#pillars">Principles</a></li>
+        <li><a href="#ongoing">Ongoing</a></li>
+        <li><a href="#past">Past projects</a></li>
+        <li><a href="#team">Who we are</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<!-- A11Y TOOLBAR -->
+<div class="a11y-bar" role="toolbar" aria-label="Accessibility options">
+  <button class="a11y-btn" id="btn-listen" onclick="toggleAudio()" aria-label="Listen to this page">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 010 7.07"/><path d="M19.07 4.93a10 10 0 010 14.14"/></svg>
+    <span class="lbl">Listen</span>
+  </button>
+  <button class="a11y-btn" id="btn-fontsize" onclick="toggleFontSize()" aria-label="Toggle larger text">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7V4h16v3"/><path d="M9 20h6"/><path d="M12 4v16"/></svg>
+    <span class="lbl">Aa+</span>
+  </button>
+</div>
+
+<!-- AUDIO BAR -->
+<div class="audio-bar" id="audio-bar" role="region" aria-label="Audio reader">
+  <button class="audio-bar-btn" id="audio-play-pause" onclick="toggleAudioPlayPause()" aria-label="Pause">
+    <svg id="audio-icon-pause" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+    <svg id="audio-icon-play" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="display:none"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+  </button>
+  <div class="audio-progress"><div class="audio-progress-fill" id="audio-progress-fill"></div></div>
+  <span class="audio-bar-text" id="audio-bar-text">Reading...</span>
+  <button class="audio-bar-btn" onclick="stopAudio()" aria-label="Stop reading">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+  </button>
+</div>
+
+<main id="main">
+<a id="top"></a>
+
+<!-- HERO -->
+<section class="hero" aria-labelledby="hero-title">
+  <div class="wrap">
+    <h1 id="hero-title" class="reveal">Inclusive Histories: accessing pasts beyond <span class="gild">ability, background and circumstance</span></h1>
+    <p class="lede reveal">Transforming how the past is encountered, taught, and valued beyond academia — designed from the ground up to be open to every learner.</p>
+    <div class="cta-row reveal">
+      <a class="btn btn-primary" href="#about">Discover the programme</a>
+      <a class="btn btn-ghost" href="#team">Who we are</a>
+    </div>
+  </div>
+</section>
+
+<hr class="gold-rule">
+
+<!-- ABOUT -->
+<section id="about" aria-labelledby="about-title">
+  <div class="wrap">
+    <p class="section-tag reveal">The Programme</p>
+    <h2 id="about-title" class="reveal">Inclusion as a founding principle, not an afterthought</h2>
+    <div class="prose reveal">
+      <p>This programme sets out to transform how the past is encountered, taught, and valued beyond academia, making inclusion its founding principle rather than an afterthought — ensuring that everyone, whatever their ability, background, or circumstance, can access history on equal terms.</p>
+      <p>Inclusion sits at the core of every stage of the programme. Working in partnership with disabled learners, educators, and communities from diverse cultural and socio-economic circumstances, we co-design activities and resources built around the principles of universal design: multi-sensory and tactile engagement with material culture, adaptable formats designed and delivered for varied learning needs, and flexible delivery that meets schools and community spaces where they are. We treat physical, sensory, cognitive, linguistic, and socio-economic needs not as edge cases but as central design considerations, ensuring that engagement with the past is a shared right open to all.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="gold-rule">
+
+<!-- MISSION -->
+<section class="mission" aria-labelledby="mission-title">
+  <div class="wrap">
+    <p class="section-tag reveal">Our Ambition</p>
+    <h2 id="mission-title" class="reveal">Our ambition extends beyond awareness.</h2>
+    <div class="prose reveal">
+      <p>By embedding inclusion into the design and delivery of every activity, we seek to nurture a new generation of learners of all abilities and from all backgrounds and circumstances, who study, question, and care about the past. In doing so, developing a new standard for inclusive public history and demonstrating the enduring vitality and public value of the humanities.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="gold-rule">
+
+<!-- PILLARS -->
+<section id="pillars" aria-labelledby="pillars-title">
+  <div class="wrap">
+    <p class="section-tag reveal">Three Commitments</p>
+    <h2 id="pillars-title" class="reveal">Inclusion at every stage</h2>
+    <div class="pillar-grid">
+      <article class="pillar reveal">
+        <span class="num">01</span>
+        <h3>Beyond Ability</h3>
+        <p>Multi-sensory and tactile engagement, adaptable formats designed and delivered for varied learning needs and attention profiles. We treat physical, sensory and cognitive needs as central design considerations — never edge cases.</p>
+      </article>
+      <article class="pillar reveal">
+        <span class="num">02</span>
+        <h3>Beyond Background</h3>
+        <p>We work in partnership with communities from diverse cultural, linguistic and socio-economic backgrounds, so that engagement with the past is a shared right open to all.</p>
+      </article>
+      <article class="pillar reveal">
+        <span class="num">03</span>
+        <h3>Beyond Circumstance</h3>
+        <p>Flexible delivery meets schools and community spaces where they are — removing the practical limits of place, resource and prior knowledge that keep heritage out of reach.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<hr class="gold-rule">
+
+<!-- ONGOING PROJECTS -->
+<section id="ongoing" class="alt-bg" aria-labelledby="ongoing-title">
+  <div class="wrap">
+    <p class="section-tag reveal">Ongoing Projects</p>
+    <h2 id="ongoing-title" class="reveal">What we are building now</h2>
+
+    <figure class="ongoing-hero reveal" style="margin:0 0 2.4rem; overflow:hidden; border:1px solid var(--line);">
+      <img src="images website/clay-ship.jpg" alt="A terracotta-coloured clay relief of a three-sailed ship, inspired by Byzantine graffiti found on the Parthenon's columns and pressed into a clay tablet to allow tactile exploration of the original carving." style="width:100%; max-width:520px; height:auto; display:block; margin:0 auto;">
+      <figcaption style="background:var(--warm-white); padding:0.8rem 1rem; font-size:0.88rem; color:var(--ink-soft); font-style:italic; border-top:1px solid var(--line);">A clay relief inspired by Byzantine graffiti found on the Parthenon's columns — pressed into a tablet to allow tactile exploration of the original carving.</figcaption>
+    </figure>
+
+    <div class="ongoing-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:1.4rem;">
+      <article class="pillar reveal" style="border-left-color:var(--deep-blue);">
+        <span class="badge live">In development</span>
+        <h3 style="color:var(--ink);">Resource packs &amp; teacher training for inclusive history clubs</h3>
+        <p>In collaboration with specialists in ADHD, autism and other neurodevelopmental needs and disabilities, we are developing a series of resource packs for primary and secondary history after-school clubs. Designed to enrich and complement existing curricula, these packs offer students exciting new ways to engage with the Byzantine past — hands-on, multi-sensory and adaptable activities created with diverse learning needs and disabilities in mind from the outset.</p>
+        <p>Each pack is paired with training workshops for teachers and educators, equipping them to lead the activities with confidence and embed inclusive practice in their own settings.</p>
+      </article>
+      <article class="pillar reveal" style="border-left-color:var(--terracotta);">
+        <span class="badge live">In development</span>
+        <h3 style="color:var(--ink);">Byzantium by touch and sound: history for blind and visually impaired learners</h3>
+        <p>This strand of the programme is dedicated to making the medieval Byzantine world fully accessible to blind and visually impaired students in special schools. Working in partnership with specialist educators, accessibility experts and the pupils themselves, we co-design history activities that lead with touch, sound and narrative rather than sight: tactile replicas of Byzantine coins, mosaics, manuscripts and architectural forms; immersive audio storytelling and soundscapes; braille and audio-described materials; and richly descriptive, dialogue-driven sessions.</p>
+        <p>The aim is not to translate a visual subject into a lesser version of itself, but to reimagine how the past can be encountered — demonstrating that history is just as vivid through the hands and the ear as through the eye.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<hr class="gold-rule">
+
+<!-- PAST PROJECTS -->
+<section id="past" aria-labelledby="past-title">
+  <div class="wrap">
+    <p class="section-tag reveal">Past Projects</p>
+    <h2 id="past-title" class="reveal">The Ever-Burning Lamp &amp; Other Mysteries of the Christian Parthenon</h2>
+
+    <article class="project reveal">
+      <div class="project-body">
+        <span class="badge">Athens Archaeology Festival &middot; 18 October 2025</span>
+        <h3>Rediscovering the Byzantine Parthenon with families and young audiences</h3>
+        <p>Created and delivered with the British School at Athens, this activity introduced families and younger audiences to the Byzantine chapter of the Parthenon — its transformation from an ancient temple into the church of Panagia Atheniotissa. Over 500 people visited on the day, combining storytelling, visual materials and hands-on engagement with historical evidence.</p>
+        <p>Participants explored the medieval graffiti scratched onto the Parthenon's columns, discussed them with the team, and made their own graffiti in clay. Feedback was overwhelmingly positive, with attendees singling out the activity's organisation, free entry, accessibility and adaptability for audiences of all ages.</p>
+        <p class="partners">A collaboration with Dr Vicky Manolopoulou, Dr Flavia Vanni and Prof. Georgios Pallis, with 3D reconstruction by D. Tsalkanis. Supported by the Society for the Promotion of Byzantine Studies (SPBS).</p>
+      </div>
+      <div class="project-media">
+        <p class="poster-tag">Explore the activity poster</p>
+        <div class="poster-stage" id="posterStage" role="group" aria-label="Activity poster, page 1 of 4">
+          <img class="active" src="activity-pack/page-1.jpg" alt="Page 1: Title page. The Ever-Burning Lamp and Other Mysteries of the Christian Parthenon. Explains the Temple of Athena Parthenos and its transformation into the Church of Panagia Atheniotissa. Features the Virgin and Child mosaic from Hagia Sophia and the mystery of the ever-burning lamp.">
+          <img src="activity-pack/page-2.jpg" alt="Page 2: Athens as a Christian city around 1000 years ago. Pagan temples converted into churches. Illustration of Kapnikarea. Sacred topography, religious processions, and over 230 medieval pilgrims graffiti on Parthenon columns.">
+          <img src="activity-pack/page-3.jpg" alt="Page 3: Activity page, Scratchings on the Wall. Byzantine graffiti examples, Emperor Basil II's visit in 1019, Greek prayer inscription, runic inscription from Piraeus. Introduces the research team and lists academic sources.">
+          <img src="activity-pack/page-4.jpg" alt="Page 4: Interactive floor plan of the Parthenon with numbered columns showing graffiti counts. Activity asks the reader to identify which column had the most graffiti.">
+        </div>
+        <div class="poster-controls">
+          <div class="nav-btns">
+            <button class="pbtn" id="posterPrev" aria-label="Previous page" disabled>&#8592;</button>
+            <button class="pbtn" id="posterNext" aria-label="Next page">&#8594;</button>
+          </div>
+          <span class="poster-counter" id="posterCounter">Page 1 of 4</span>
+          <div class="poster-actions">
+            <button id="posterZoom" aria-haspopup="dialog">Enlarge</button>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- VIDEO -->
+    <div class="video-section reveal">
+      <h3>Video</h3>
+      <div class="video-wrap">
+        <video controls preload="metadata">
+          <source src="videos website/BSA Archaeology festival.mp4" type="video/mp4">
+          Your browser does not support video.
+        </video>
+      </div>
+    </div>
+
+    <!-- GALLERY -->
+    <div class="gallery-head reveal">
+      <h3>From the day</h3>
+      <p>Families and visitors of all ages explored the Byzantine Parthenon, handled tactile reproductions, and made their own clay graffiti.</p>
+      <div class="gallery-grid" id="galleryGrid">
+        <figure class="gallery-item">
+          <button class="gtrigger" onclick="openLightbox(0)" aria-label="Enlarge: The team at the BSA booth"><img src="images website/team-booth.jpg" alt="The research team — Prof. Georgios Pallis, Dr Vicky Manolopoulou and Dr Flavia Vanni — standing behind the activity table at the British School at Athens, with a laptop showing a 3D reconstruction of the Parthenon, printed activity packs, a clay ship replica and research materials spread across a red-and-white tablecloth."></button>
+          <figcaption>The team at the BSA booth</figcaption>
+        </figure>
+        <figure class="gallery-item">
+          <button class="gtrigger" onclick="openLightbox(1)" aria-label="Enlarge: Decorative clay patterns"><img src="images website/clay-sunburst.jpg" alt="A detailed clay slab carved with a radiating sunburst motif surrounded by dotted patterns and a small ship, with sculpting tools laid alongside — created by a visitor during the hands-on graffiti activity."></button>
+          <figcaption>Decorative clay patterns</figcaption>
+        </figure>
+        <figure class="gallery-item">
+          <button class="gtrigger" onclick="openLightbox(2)" aria-label="Enlarge: Carving a Byzantine building"><img src="images website/clay-building.jpg" alt="A visitor's hand using a yellow sculpting tool to carve a detailed Byzantine building facade — with arches, columns and a decorated pediment — into a flat clay slab, with modelling tools spread nearby."></button>
+          <figcaption>Carving a Byzantine building</figcaption>
+        </figure>
+        <figure class="gallery-item">
+          <button class="gtrigger" onclick="openLightbox(3)" aria-label="Enlarge: Children carving their own graffiti"><img src="images website/clay-numbers.jpg" alt="A child in a red top holding up a paper plate with a clay disc on which they have inscribed the numbers 100 and 1000, practising the Byzantine dating system used in the activity."></button>
+          <figcaption>Children carving their own graffiti</figcaption>
+        </figure>
+        <figure class="gallery-item">
+          <button class="gtrigger" onclick="openLightbox(4)" aria-label="Enlarge: Children carving their own graffiti"><img src="images website/clay-writing.jpg" alt="A young person using a yellow pencil to carefully inscribe text into a clay disc on a paper plate, with an upside-down Greek inscription sheet visible on the table — recreating medieval Parthenon graffiti."></button>
+          <figcaption>Children carving their own graffiti</figcaption>
+        </figure>
+        <figure class="gallery-item">
+          <button class="gtrigger" onclick="openLightbox(5)" aria-label="Enlarge: Finished plates on display"><img src="images website/plates-display.jpg" alt="Two finished clay creations on paper plates displayed on a white tablecloth — one carved with a ship and the other with a star-like pattern — alongside a questionnaire sheet from the activity feedback."></button>
+          <figcaption>Finished plates on display</figcaption>
+        </figure>
+        <figure class="gallery-item">
+          <button class="gtrigger" onclick="openLightbox(6)" aria-label="Enlarge: Exhibition setup"><img src="images website/exhibition-table.jpg" alt="The full activity table at the British School at Athens: a laptop displaying a 3D reconstruction of the Parthenon, printed activity packs in yellow and white, a clay ship replica, QR code stands, research handouts and a red-and-white tablecloth with classical figures."></button>
+          <figcaption>Exhibition setup</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <!-- IMPACT -->
+    <div class="impact-section reveal">
+      <h3>Impact</h3>
+      <p>Questionnaire data showed clear evidence of learning impact and change in understanding. Participants consistently reported that the activity significantly increased their understanding of the Parthenon's different historical phases, including the Byzantine period as a vital, often overlooked part of history.</p>
+      <div class="pie-grid">
+        <div class="pie-card">
+          <h4>Understanding of the Parthenon's role</h4>
+          <p class="q">To what extent has this activity changed your understanding of the Parthenon's role in Byzantine Athens?</p>
+          <div class="pie-container">
+            <svg class="pie-svg" viewBox="0 0 36 36" aria-hidden="true">
+              <circle cx="18" cy="18" r="15.9" fill="none" stroke="#b8956a" stroke-width="4" stroke-dasharray="62 38" stroke-dashoffset="0"/>
+              <circle cx="18" cy="18" r="15.9" fill="none" stroke="#c4704e" stroke-width="4" stroke-dasharray="28 72" stroke-dashoffset="-62"/>
+              <circle cx="18" cy="18" r="15.9" fill="none" stroke="#6b6560" stroke-width="4" stroke-dasharray="8 92" stroke-dashoffset="-90"/>
+              <circle cx="18" cy="18" r="15.9" fill="none" stroke="#d4cec4" stroke-width="4" stroke-dasharray="2 98" stroke-dashoffset="-98"/>
+            </svg>
+            <div>
+              <div class="pie-legend-item"><span class="pie-legend-swatch" style="background:#b8956a"></span> A great deal</div>
+              <div class="pie-legend-item"><span class="pie-legend-swatch" style="background:#c4704e"></span> Quite a bit</div>
+              <div class="pie-legend-item"><span class="pie-legend-swatch" style="background:#6b6560"></span> Somewhat</div>
+              <div class="pie-legend-item"><span class="pie-legend-swatch" style="background:#d4cec4"></span> Not at all</div>
+            </div>
+          </div>
+        </div>
+        <div class="pie-card">
+          <h4>Changed view of the Acropolis</h4>
+          <p class="q">Has learning about the Byzantine Parthenon made you think differently about the Acropolis or Athens today?</p>
+          <div class="pie-container">
+            <svg class="pie-svg" viewBox="0 0 36 36" aria-hidden="true">
+              <circle cx="18" cy="18" r="15.9" fill="none" stroke="#2c4a6e" stroke-width="4" stroke-dasharray="58 42" stroke-dashoffset="0"/>
+              <circle cx="18" cy="18" r="15.9" fill="none" stroke="#1a7a78" stroke-width="4" stroke-dasharray="30 70" stroke-dashoffset="-58"/>
+              <circle cx="18" cy="18" r="15.9" fill="none" stroke="#6b6560" stroke-width="4" stroke-dasharray="9 91" stroke-dashoffset="-88"/>
+              <circle cx="18" cy="18" r="15.9" fill="none" stroke="#d4cec4" stroke-width="4" stroke-dasharray="3 97" stroke-dashoffset="-97"/>
+            </svg>
+            <div>
+              <div class="pie-legend-item"><span class="pie-legend-swatch" style="background:#2c4a6e"></span> Yes, a lot</div>
+              <div class="pie-legend-item"><span class="pie-legend-swatch" style="background:#1a7a78"></span> Yes, somewhat</div>
+              <div class="pie-legend-item"><span class="pie-legend-swatch" style="background:#6b6560"></span> Not much</div>
+              <div class="pie-legend-item"><span class="pie-legend-swatch" style="background:#d4cec4"></span> Not at all</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUOTES -->
+    <div class="quotes-section reveal">
+      <h3>Participant voices</h3>
+      <div class="quotes-grid">
+        <div class="quote-card"><p>We love Byzantium!</p></div>
+        <div class="quote-card"><p>Excellent presentation, a lot of research work has gone into the findings and still continues to resolve more mysteries.</p></div>
+        <div class="quote-card"><p>I didn't know that the Parthenon was converted into a church. Yes, it changed my thinking a lot!</p></div>
+        <div class="quote-card"><p>They never refer to the Parthenon between the Ancient period and the Ottoman period in schoolbooks. It was nice that we referred to this period.</p></div>
+        <div class="quote-card"><p>There is not only 500 BC in Athens!</p></div>
+        <div class="quote-card"><p>Very good idea for schools!</p></div>
+        <div class="quote-card"><p>Extremely interesting information about the graffiti of the Parthenon! Thank you!</p></div>
+        <div class="quote-card"><p>I love it! Beautiful event, classy location, friendly team.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="gold-rule">
+
+<!-- TEAM -->
+<section id="team" class="alt-bg" aria-labelledby="team-title">
+  <div class="wrap">
+    <p class="section-tag reveal">Who We Are</p>
+    <h2 id="team-title" class="reveal">A team of Byzantinists committed to opening up the past</h2>
+    <figure class="team-photo reveal">
+      <img src="images website/team-booth.jpg" alt="The three-person team — Prof. Georgios Pallis, Dr Vicky Manolopoulou and Dr Flavia Vanni — standing behind their activity stall at the Athens Archaeology Festival, wearing Myths and Mysteries t-shirts.">
+      <figcaption>At the Athens Archaeology Festival, October 2025: Dr Vicky Manolopoulou and Dr Flavia Vanni with Prof. Georgios Pallis (National &amp; Kapodistrian University of Athens), who collaborated on the activity.</figcaption>
+    </figure>
+    <div class="team-grid">
+      <article class="member reveal">
+        <div class="avatar" aria-hidden="true">FV</div>
+        <h3>Dr Flavia Vanni</h3>
+        <p class="role">British Academy Postdoctoral Fellow, Newcastle University</p>
+        <p>A specialist in Byzantine material culture and art history, Flavia's research includes developing inclusive strategies to communicate and teach cultural heritage to blind and visually impaired people. She has created tactile and synaesthetic visitor paths to medieval wall paintings and led workshops training museum guides in tactile and multi-sensory visits.</p>
+      </article>
+      <article class="member reveal">
+        <div class="avatar" aria-hidden="true">VM</div>
+        <h3>Dr Vicky Manolopoulou</h3>
+        <p class="role">Research Fellow, Ca' Foscari University of Venice</p>
+        <p>A specialist in the history and archaeology of Byzantine landscapes, Vicky's research spans landscape studies, environmental humanities and the history of emotions. Dedicated to maximising research impact beyond academia, she is actively involved in outreach and public engagement, community-facing case studies, and initiatives aimed at widening participation.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="contact-section" aria-labelledby="contact-title">
+  <div class="wrap">
+    <p class="section-tag reveal">Contact Us</p>
+    <h2 id="contact-title" class="reveal">Get in touch</h2>
+    <div class="prose reveal">
+      <p>We welcome schools, community organisations, museums, funders and disabled-led groups who share our commitment to inclusive public history.</p>
+    </div>
+    <div class="emails reveal">
+      <span>Vicky Manolopoulou — <a href="mailto:vasil.manolopoulou@unive.it">vasil.manolopoulou@unive.it</a></span>
+      <span>Flavia Vanni — <a href="mailto:flavia.vanni@newcastle.ac.uk">flavia.vanni@newcastle.ac.uk</a></span>
+    </div>
+    <div class="cta-row reveal">
+      <a class="btn btn-primary" href="mailto:vasil.manolopoulou@unive.it">Contact us</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <span>Inclusive Histories — a public history &amp; humanities programme</span>
+    <span><a href="mailto:vasil.manolopoulou@unive.it">vasil.manolopoulou@unive.it</a> &middot; <a href="mailto:flavia.vanni@newcastle.ac.uk">flavia.vanni@newcastle.ac.uk</a></span>
+    <span><a href="#main">Back to top</a></span>
+  </div>
+</footer>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" role="dialog" aria-label="Enlarged image">
+  <button class="lightbox-close" onclick="closeLightbox()" aria-label="Close">&#10005;</button>
+  <button class="lightbox-nav prev" onclick="lightboxPrev()" aria-label="Previous">&#8592;</button>
+  <img src="" alt="" id="lightbox-img">
+  <button class="lightbox-nav next" onclick="lightboxNext()" aria-label="Next">&#8594;</button>
+</div>
+
+<script>
+// ── Scroll reveal ──
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+// ── Poster viewer ──
+let posterPage = 0;
+const posterImgs = document.querySelectorAll('#posterStage img');
+const posterTotal = posterImgs.length;
+function showPoster(i) {
+  posterPage = Math.max(0, Math.min(i, posterTotal - 1));
+  posterImgs.forEach((img, idx) => img.classList.toggle('active', idx === posterPage));
+  document.getElementById('posterCounter').textContent = 'Page ' + (posterPage + 1) + ' of ' + posterTotal;
+  document.getElementById('posterStage').setAttribute('aria-label', 'Activity poster, page ' + (posterPage + 1) + ' of ' + posterTotal);
+  document.getElementById('posterPrev').disabled = posterPage === 0;
+  document.getElementById('posterNext').disabled = posterPage === posterTotal - 1;
+}
+document.getElementById('posterPrev').onclick = () => showPoster(posterPage - 1);
+document.getElementById('posterNext').onclick = () => showPoster(posterPage + 1);
+document.getElementById('posterZoom').onclick = () => {
+  const img = posterImgs[posterPage];
+  document.getElementById('lightbox-img').src = img.src;
+  document.getElementById('lightbox-img').alt = img.alt;
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+};
+
+// ── Gallery lightbox ──
+const galleryImgs = document.querySelectorAll('.gallery-item img');
+let lbIndex = 0;
+function openLightbox(i) {
+  lbIndex = i;
+  const img = galleryImgs[i];
+  document.getElementById('lightbox-img').src = img.src;
+  document.getElementById('lightbox-img').alt = img.alt;
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function lightboxNext() { if (lbIndex < galleryImgs.length - 1) openLightbox(lbIndex + 1); }
+function lightboxPrev() { if (lbIndex > 0) openLightbox(lbIndex - 1); }
+document.getElementById('lightbox').addEventListener('click', e => { if (e.target === e.currentTarget) closeLightbox(); });
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('lightbox').classList.contains('open')) return;
+  if (e.key === 'Escape') closeLightbox();
+  if (e.key === 'ArrowRight') lightboxNext();
+  if (e.key === 'ArrowLeft') lightboxPrev();
+});
+
+// ── Font size ──
+function toggleFontSize() {
+  document.body.classList.toggle('font-large');
+  document.getElementById('btn-fontsize').classList.toggle('active');
+}
+
+// ── Text-to-Speech ──
+let speechSynth = window.speechSynthesis, isReading = false, isPaused = false, readIdx = 0, sections = [];
+function getReadable() {
+  const s = []; const sels = ['h1','h2','h3','.lede','.prose p','.pillar p','.project-body p','.impact-section > p','.quote-card p','.member p','.contact-section .prose p'];
+  sels.forEach(sel => document.querySelectorAll(sel).forEach(el => { const t = el.textContent.trim(); if (t) s.push({el, text: t}); }));
+  return s;
+}
+function toggleAudio() {
+  if (isReading) { stopAudio(); return; }
+  sections = getReadable(); if (!sections.length) return;
+  readIdx = 0; isReading = true; isPaused = false;
+  document.getElementById('btn-listen').classList.add('active');
+  document.getElementById('audio-bar').classList.add('visible');
+  readNext();
+}
+function readNext() {
+  if (readIdx >= sections.length || !isReading) { stopAudio(); return; }
+  const s = sections[readIdx];
+  const u = new SpeechSynthesisUtterance(s.text);
+  u.rate = 0.95; u.lang = 'en-GB';
+  document.querySelectorAll('.reading-highlight').forEach(el => el.classList.remove('reading-highlight'));
+  s.el.classList.add('reading-highlight');
+  s.el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  document.getElementById('audio-progress-fill').style.width = ((readIdx + 1) / sections.length * 100) + '%';
+  document.getElementById('audio-bar-text').textContent = s.text.substring(0, 60) + (s.text.length > 60 ? '...' : '');
+  u.onend = () => { readIdx++; if (isReading) readNext(); };
+  u.onerror = () => { readIdx++; if (isReading) readNext(); };
+  speechSynth.speak(u);
+}
+function toggleAudioPlayPause() {
+  if (isPaused) { speechSynth.resume(); isPaused = false; document.getElementById('audio-icon-pause').style.display = ''; document.getElementById('audio-icon-play').style.display = 'none'; }
+  else { speechSynth.pause(); isPaused = true; document.getElementById('audio-icon-pause').style.display = 'none'; document.getElementById('audio-icon-play').style.display = ''; }
+}
+function stopAudio() {
+  speechSynth.cancel(); isReading = false; isPaused = false; readIdx = 0;
+  document.querySelectorAll('.reading-highlight').forEach(el => el.classList.remove('reading-highlight'));
+  document.getElementById('btn-listen').classList.remove('active');
+  document.getElementById('audio-bar').classList.remove('visible');
+  document.getElementById('audio-progress-fill').style.width = '0%';
+  document.getElementById('audio-icon-pause').style.display = '';
+  document.getElementById('audio-icon-play').style.display = 'none';
+}
+</script>
+</body>
+</html>
